@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:firebase/constants/consts.dart';
 import 'package:firebase/controlls/auth_provider.dart';
 import 'package:firebase/controlls/functions/functions.dart';
 import 'package:firebase/controlls/navigators/navigators.dart';
+import 'package:firebase/controlls/providers/providers.dart';
 import 'package:firebase/view/home_screen1.dart';
 import 'package:firebase/view/login_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -38,42 +41,49 @@ class _RegisterPageState extends State<RegisterPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Image.asset(
-                            'assets/undraw_Login_re_4vu2.png',
-                            width: 400,
-                            height: 300,
+                          Row(
+                            children: [
+                              const Text(
+                                'Create New Account',
+                                style: TextStyle(
+                                  fontSize: 24,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const Spacer(),
+                              Image.asset(
+                                'assets/undraw_New_entries_re_cffr.png',
+                                width: 100,
+                                height: 100,
+                              ),
+                            ],
                           ),
-                          const Text(
-                            'Register',
-                            style: TextStyle(
-                              fontSize: 34,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                            ),
+                          const AddImage(),
+                          sizehight20,
+                          TextFieldWid(
+                            controller: Variables.name,
+                            label: 'Name',
                           ),
                           sizehight20,
-                          TextField(
+                          TextFieldWid(
+                            controller: Variables.address,
+                            label: 'Address',
+                          ),
+                          sizehight20,
+                          TextFieldWid(
+                            controller: Variables.contact,
+                            label: 'Contact',
+                          ),
+                          sizehight20,
+                          TextFieldWid(
                             controller: Variables.email,
-                            decoration: const InputDecoration(
-                              border: OutlineInputBorder(),
-                              labelText: 'Email',
-                              labelStyle: TextStyle(
-                                fontSize: 20,
-                                color: greyclr,
-                              ),
-                            ),
+                            label: 'Email',
                           ),
                           sizehight20,
-                          TextField(
+                          TextFieldWid(
                             controller: Variables.password,
-                            decoration: const InputDecoration(
-                              border: OutlineInputBorder(),
-                              labelText: 'Password',
-                              labelStyle: TextStyle(
-                                fontSize: 20,
-                                color: greyclr,
-                              ),
-                            ),
+                            label: 'Password',
                           ),
                           sizehight20,
                           if (authProvider.loading)
@@ -147,4 +157,75 @@ class _RegisterPageState extends State<RegisterPage> {
   //   Variables.password.dispose();
   //   super.dispose();
   // }
+}
+
+class TextFieldWid extends StatelessWidget {
+  final TextEditingController controller;
+  final String label;
+
+  const TextFieldWid({
+    required this.controller,
+    required this.label,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      controller: controller,
+      decoration: InputDecoration(
+        border: const OutlineInputBorder(),
+        labelText: label,
+        labelStyle: const TextStyle(
+          fontSize: 20,
+          color: greyclr,
+        ),
+      ),
+    );
+  }
+}
+
+class AddImage extends StatelessWidget {
+  const AddImage({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<ImageAddPro>(
+      builder: (context, value, child) => Center(
+        child: SizedBox(
+          height: 115,
+          width: 115,
+          child: Stack(
+            clipBehavior: Clip.none,
+            fit: StackFit.expand,
+            children: [
+              CircleAvatar(
+                backgroundColor: Colors.black,
+                radius: 60,
+                backgroundImage: MemoryImage(
+                  const Base64Decoder().convert(value.imageToString),
+                ),
+              ),
+              Positioned(
+                bottom: 0,
+                right: -30,
+                child: RawMaterialButton(
+                  onPressed: () {
+                    value.pickImage();
+                  },
+                  elevation: 4,
+                  fillColor: Colors.white,
+                  padding: const EdgeInsets.all(8),
+                  shape: const CircleBorder(),
+                  child: const Icon(Icons.person_add),
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }

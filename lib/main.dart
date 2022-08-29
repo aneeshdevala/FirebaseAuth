@@ -1,4 +1,5 @@
 import 'package:firebase/controlls/auth_provider.dart';
+import 'package:firebase/controlls/providers/providers.dart';
 import 'package:firebase/view/home_screen1.dart';
 import 'package:firebase/view/login_page.dart';
 import 'package:firebase/view/register_page.dart';
@@ -22,6 +23,9 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (context) => AuthProvider(FirebaseAuth.instance),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ImageAddPro(),
         ),
         StreamProvider(
             create: (context) => context.watch<AuthProvider>().stream(),

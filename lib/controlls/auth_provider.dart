@@ -1,9 +1,14 @@
+import 'dart:developer';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase/controlls/functions/functions.dart';
+import 'package:firebase/model.dart/model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthProvider extends ChangeNotifier {
+  UserModel loggedUserModell = UserModel();
   FirebaseAuth _auth;
   AuthProvider(this._auth);
   bool _isloading = false;
@@ -15,12 +20,16 @@ class AuthProvider extends ChangeNotifier {
     await _auth.signOut();
   }
 
-  Future<String> signIn(String email, String password) async {
+  Future<String> signIn(String email, String password, context) async {
     try {
       _isloading = true;
       notifyListeners();
-      await _auth.signInWithEmailAndPassword(
-          email: email.trim(), password: password.trim());
+      await _auth
+          .signInWithEmailAndPassword(
+              email: email.trim(), password: password.trim())
+          .then((value) {
+        getAllUserDetails(context);
+      });
       _isloading = false;
       notifyListeners();
       return Future.value('');
@@ -31,13 +40,16 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
-  Future<String> signUp(String email, String password) async {
+  Future<String> signUp(String email, String password, String image,
+      String name, String address, String contact) async {
     try {
       _isloading = true;
       notifyListeners();
       await _auth.createUserWithEmailAndPassword(
           email: email.trim(), password: password.trim());
+      await registerdata(email, password, image, name, address, contact);
       _isloading = false;
+
       notifyListeners();
       return Future.value('');
     } on FirebaseAuthException catch (ex) {
@@ -87,4 +99,35 @@ class AuthProvider extends ChangeNotifier {
   Future<String> fbSignOut() async {
     return Future.value('Facebook SignOut');
   }
+
+  //ReadData;
+  getAllUserDetails(context) {
+    User? user = _auth.currentUser;
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(user!.uid)
+        .get()
+        .then((value) {
+      loggedUserModell = UserModel.fromJson(value.data()!);
+      print(loggedUserModell.name);
+      // print(user.uid);
+      log(loggedUserModell.name.toString());
+    });
+  }
+
+  registerdata(String email, String password, String image, String name,
+      String address, String contact) async {
+    User? user = _auth.currentUser;
+
+    FirebaseFirestore.instance.collection('users').doc(user!.uid).set({
+      'password': password,
+      'email': user.email,
+      'image': image,
+      'name': name,
+      'address': address,
+      'id': user.uid,
+    });
+  }
+
+  void notifyListeners();
 }

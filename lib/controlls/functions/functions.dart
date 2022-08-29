@@ -3,10 +3,14 @@ import 'package:flutter/material.dart';
 
 class Variables {
   static TextEditingController email = TextEditingController(),
-      password = TextEditingController();
+      password = TextEditingController(),
+      name = TextEditingController(),
+      address = TextEditingController(),
+      contact = TextEditingController();
+  static String image = "";
 
   static void signIn(AuthProvider provider, context) async {
-    var msg = await provider.signIn(email.text, password.text);
+    var msg = await provider.signIn(email.text, password.text, context);
 
     //var authProvider = context.watch<AuthProvider>();
 
@@ -17,7 +21,8 @@ class Variables {
   }
 
   static void signUp(AuthProvider provider, context) async {
-    var msg = await provider.signUp(email.text, password.text);
+    var msg = await provider.signUp(email.text, password.text, name.text,
+        address.text, contact.text, image);
 
     //var authProvider = context.watch<AuthProvider>();
 
