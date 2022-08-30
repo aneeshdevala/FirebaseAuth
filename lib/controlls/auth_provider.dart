@@ -1,13 +1,27 @@
+import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase/controlls/functions/functions.dart';
+import 'package:firebase/controlls/providers/util_providers.dart';
 import 'package:firebase/model.dart/model.dart';
+import 'package:firebase/view/home_screen1.dart';
+import 'package:firebase/view/widgets/temp_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 
 class AuthProvider extends ChangeNotifier {
+  final nameControl = TextEditingController();
+  final emailControl = TextEditingController();
+  final passwordControl = TextEditingController();
+  final addresscontrol = TextEditingController();
+  final contactControl = TextEditingController();
+
   UserModel loggedUserModell = UserModel();
   FirebaseAuth _auth;
   AuthProvider(this._auth);
@@ -28,9 +42,54 @@ class AuthProvider extends ChangeNotifier {
           .signInWithEmailAndPassword(
               email: email.trim(), password: password.trim())
           .then((value) {
-        getAllUserDetails(context);
-      });
+        Provider.of<UtilProvider>(context, listen: false).collectionName =
+            emailControl.text;
+      }).then((value) {
+        _isloading = false;
+        notifyListeners();
+      }).then((value) => Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => const HomePage())));
+      return Future.value('');
+    } on FirebaseAuthException catch (ex) {
       _isloading = false;
+      notifyListeners();
+      return Future.value(ex.message);
+    }
+  }
+  // input controllers
+
+  Future<String> signUp(
+      {required String email,
+      required String password,
+      required String image,
+      required String name,
+      required String address,
+      required String contact,
+      context}) async {
+    if (name.isEmpty ||
+        address.isEmpty ||
+        email.isEmpty ||
+        password.isEmpty ||
+        password.length < 6 ||
+        image == '' ||
+        contact.isEmpty ||
+        contact.length < 10) {
+      // return UtilProvider.showScaffoldMessege(context);
+    }
+    try {
+      _isloading = true;
+      notifyListeners();
+      await _auth.createUserWithEmailAndPassword(
+          email: email.trim(), password: password.trim());
+      await registerdata(
+          email: email,
+          password: password,
+          image: image,
+          name: name,
+          address: address,
+          contact: contact);
+      _isloading = false;
+
       notifyListeners();
       return Future.value('');
     } on FirebaseAuthException catch (ex) {
@@ -40,23 +99,18 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
-  Future<String> signUp(String email, String password, String image,
-      String name, String address, String contact) async {
-    try {
-      _isloading = true;
-      notifyListeners();
-      await _auth.createUserWithEmailAndPassword(
-          email: email.trim(), password: password.trim());
-      await registerdata(email, password, image, name, address, contact);
-      _isloading = false;
-
-      notifyListeners();
-      return Future.value('');
-    } on FirebaseAuthException catch (ex) {
-      _isloading = false;
-      notifyListeners();
-      return Future.value(ex.message);
+  String _imageToString = tempImg;
+  get imageToString => _imageToString;
+  set imageToString(val) => _imageToString = val;
+  pickImage() async {
+    final imageFromGallery =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (imageFromGallery == null) {
+      return;
     }
+    final bytes = File(imageFromGallery.path).readAsBytesSync();
+    _imageToString = base64Encode(bytes);
+    notifyListeners();
   }
 
   Future<String> googleSign() async {
@@ -109,19 +163,24 @@ class AuthProvider extends ChangeNotifier {
         .get()
         .then((value) {
       loggedUserModell = UserModel.fromJson(value.data()!);
-      print(loggedUserModell.name);
+      // print(loggedUserModell.name);
       // print(user.uid);
       log(loggedUserModell.name.toString());
     });
   }
 
-  registerdata(String email, String password, String image, String name,
-      String address, String contact) async {
+  registerdata(
+      {required String email,
+      required String password,
+      required String image,
+      required String name,
+      required String address,
+      required String contact}) async {
     User? user = _auth.currentUser;
 
     FirebaseFirestore.instance.collection('users').doc(user!.uid).set({
       'password': password,
-      'email': user.email,
+      'email': email,
       'image': image,
       'name': name,
       'address': address,

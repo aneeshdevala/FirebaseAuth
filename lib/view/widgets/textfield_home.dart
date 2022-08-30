@@ -1,56 +1,78 @@
+import 'package:firebase/controlls/providers/util_providers.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class TextFieldWidgetHome extends StatelessWidget {
-  final TextInputType type;
-  final String hint;
-  final TextEditingController contoller;
-  final Size size;
-  final IconData icon;
-  const TextFieldWidgetHome({
+class TextFieldWidget extends StatelessWidget {
+  const TextFieldWidget({
     Key? key,
+    required this.hintText,
+    required this.maxLen,
+    required this.control,
     required this.icon,
-    required this.size,
-    required this.contoller,
-    required this.hint,
-    required this.type,
+    this.isPassword = false,
   }) : super(key: key);
+  final String hintText;
+  final int maxLen;
+  final TextEditingController control;
+  final IconData icon;
+  final bool isPassword;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
-      height: size.width / 8,
-      width: size.width / 1.22,
-      alignment: Alignment.center,
-      padding: EdgeInsets.only(right: size.width / 30),
-      decoration: BoxDecoration(
-        color: Color.fromARGB(255, 170, 15, 80).withOpacity(.8),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Center(
-        child: TextField(
-          readOnly: true,
-          controller: contoller,
-          keyboardType: type,
-          style: const TextStyle(
-            color: Colors.white,
-            letterSpacing: .8,
-          ),
-          decoration: InputDecoration(
-            border: InputBorder.none,
-            prefixIcon: Icon(
-              icon,
-              color: Colors.white,
-            ),
-            hintText: hint,
-            hintStyle: const TextStyle(
-              letterSpacing: 1,
-              color: Colors.white,
-              fontSize: 18,
-            ),
+    return Row(
+      children: [
+        SizedBox(
+          height: 58,
+          width: 56,
+          child: Card(
+            color: const Color.fromARGB(255, 3, 55, 97),
+            child: Icon(icon, size: 22, color: Colors.white),
           ),
         ),
-      ),
+        Expanded(
+          child: SizedBox(
+            height: 52,
+            child: Consumer<UtilProvider>(builder: (context, authPro, _) {
+              return TextField(
+                controller: control,
+                decoration: InputDecoration(
+                    border: const OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(10),
+                      ),
+                    ),
+                    fillColor: Colors.grey[800],
+                    filled: true,
+                    hintText: hintText,
+                    hintStyle: TextStyle(
+                      color: Colors.white.withOpacity(0.3),
+                    ),
+                    counterText: '',
+                    suffixIcon: isPassword
+                        ? GestureDetector(
+                            onTap: () {
+                              authPro.isObscure == true
+                                  ? Provider.of<UtilProvider>(context,
+                                          listen: false)
+                                      .isObscure = false
+                                  : authPro.isObscure = true;
+                            },
+                            child: authPro.isObscure
+                                ? const Icon(Icons.visibility)
+                                : const Icon(Icons.visibility_off))
+                        : null),
+                maxLength: maxLen,
+                style: const TextStyle(color: Colors.white),
+                obscureText: authPro.isObscure
+                    ? false
+                    : isPassword
+                        ? true
+                        : false,
+              );
+            }),
+          ),
+        ),
+      ],
     );
   }
 }

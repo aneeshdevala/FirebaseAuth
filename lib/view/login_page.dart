@@ -45,7 +45,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     sizehight20,
                     TextField(
-                      controller: Variables.email,
+                      controller: Functions.email,
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: 'Email',
@@ -57,7 +57,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     sizehight20,
                     TextField(
-                      controller: Variables.password,
+                      controller: Functions.password,
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: 'Password',
@@ -82,7 +82,7 @@ class _LoginPageState extends State<LoginPage> {
                                     const Color.fromARGB(255, 241, 15, 83)),
                               ),
                               onPressed: () =>
-                                  Variables.signIn(authProvider, context),
+                                  Functions.signIn(authProvider, context),
                               child: const Text('Login')),
                         ),
                       ),
@@ -113,7 +113,7 @@ class _LoginPageState extends State<LoginPage> {
                       children: [
                         GestureDetector(
                           onTap: () =>
-                              Variables.googleSignIn(authProvider, context),
+                              Functions.googleSignIn(authProvider, context),
                           child: Image.asset(
                             'assets/google.png',
                             width: 50,
@@ -123,7 +123,7 @@ class _LoginPageState extends State<LoginPage> {
                         sizewidth,
                         GestureDetector(
                           onTap: () =>
-                              Variables.fbSignIn(authProvider, context),
+                              Functions.fbSignIn(authProvider, context),
                           child: Image.asset(
                             'assets/fb_icon_325x325.png',
                             width: 40,

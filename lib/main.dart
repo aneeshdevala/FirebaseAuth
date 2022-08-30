@@ -1,5 +1,7 @@
 import 'package:firebase/controlls/auth_provider.dart';
+import 'package:firebase/controlls/providers/home_providers.dart';
 import 'package:firebase/controlls/providers/providers.dart';
+import 'package:firebase/controlls/providers/util_providers.dart';
 import 'package:firebase/view/home_screen1.dart';
 import 'package:firebase/view/login_page.dart';
 import 'package:firebase/view/register_page.dart';
@@ -29,7 +31,13 @@ class MyApp extends StatelessWidget {
         ),
         StreamProvider(
             create: (context) => context.watch<AuthProvider>().stream(),
-            initialData: null)
+            initialData: null),
+        ChangeNotifierProvider(
+          create: (context) => HomeProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => UtilProvider(),
+        )
       ],
       child: MaterialApp(
         title: 'Flutter Demo',

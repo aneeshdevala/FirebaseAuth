@@ -62,27 +62,27 @@ class _RegisterPageState extends State<RegisterPage> {
                           const AddImage(),
                           sizehight20,
                           TextFieldWid(
-                            controller: Variables.name,
+                            controller: Functions.name,
                             label: 'Name',
                           ),
                           sizehight20,
                           TextFieldWid(
-                            controller: Variables.address,
+                            controller: Functions.address,
                             label: 'Address',
                           ),
                           sizehight20,
                           TextFieldWid(
-                            controller: Variables.contact,
+                            controller: Functions.contact,
                             label: 'Contact',
                           ),
                           sizehight20,
                           TextFieldWid(
-                            controller: Variables.email,
+                            controller: Functions.email,
                             label: 'Email',
                           ),
                           sizehight20,
                           TextFieldWid(
-                            controller: Variables.password,
+                            controller: Functions.password,
                             label: 'Password',
                           ),
                           sizehight20,
@@ -102,7 +102,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                                   255, 241, 15, 83)),
                                     ),
                                     onPressed: () =>
-                                        Variables.signUp(authProvider, context),
+                                        Functions.signUp(authProvider, context),
                                     child: const Text('SignUp')),
                               ),
                             ),
@@ -205,7 +205,7 @@ class AddImage extends StatelessWidget {
                 backgroundColor: Colors.black,
                 radius: 60,
                 backgroundImage: MemoryImage(
-                  const Base64Decoder().convert(value.imageToString),
+                  const Base64Decoder().convert(ImageAddPro.imageToString),
                 ),
               ),
               Positioned(
