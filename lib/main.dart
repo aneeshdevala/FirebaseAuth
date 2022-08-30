@@ -1,6 +1,8 @@
 import 'package:firebase/controlls/auth_provider.dart';
 import 'package:firebase/controlls/providers/home_providers.dart';
+import 'package:firebase/controlls/providers/login_pro.dart';
 import 'package:firebase/controlls/providers/providers.dart';
+import 'package:firebase/controlls/providers/signup_pro.dart';
 import 'package:firebase/controlls/providers/util_providers.dart';
 import 'package:firebase/view/home_screen1.dart';
 import 'package:firebase/view/login_page.dart';
@@ -26,14 +28,17 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => AuthProvider(FirebaseAuth.instance),
         ),
-        ChangeNotifierProvider(
-          create: (context) => ImageAddPro(),
-        ),
         StreamProvider(
-            create: (context) => context.watch<AuthProvider>().stream(),
+            create: (context) => context.watch<SignUpProvider>().stream(),
             initialData: null),
         ChangeNotifierProvider(
           create: (context) => HomeProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => SignUpProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => LoginProvider(),
         ),
         ChangeNotifierProvider(
           create: (context) => UtilProvider(),

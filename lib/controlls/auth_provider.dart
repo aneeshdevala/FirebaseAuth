@@ -4,6 +4,8 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase/controlls/functions/functions.dart';
+import 'package:firebase/controlls/providers/home_providers.dart';
+import 'package:firebase/controlls/providers/providers.dart';
 import 'package:firebase/controlls/providers/util_providers.dart';
 import 'package:firebase/model.dart/model.dart';
 import 'package:firebase/view/home_screen1.dart';
@@ -22,17 +24,42 @@ class AuthProvider extends ChangeNotifier {
   final addresscontrol = TextEditingController();
   final contactControl = TextEditingController();
 
+  static TextEditingController email = TextEditingController(),
+      password = TextEditingController(),
+      name = TextEditingController(),
+      address = TextEditingController(),
+      contact = TextEditingController();
+  static String image = imagePick(HomeProvider());
+
+  static imagePick(HomeProvider provider) async {
+    var imagePick = await ImagePicker().pickImage(source: ImageSource.gallery);
+    var bytes = File(imagePick!.path).readAsBytesSync();
+    image = base64Encode(bytes);
+    provider.pickImage();
+  }
+
   UserModel loggedUserModell = UserModel();
   FirebaseAuth _auth;
   AuthProvider(this._auth);
   bool _isloading = false;
 
-  Stream<User?> stream() => _auth.authStateChanges();
+  //Stream<User?> stream() => _auth.authStateChanges();
   bool get loading => _isloading;
 
   Future<void> signOut() async {
     await _auth.signOut();
   }
+
+  // static void signIn(AuthProvider provider, context) async {
+  //   var msg = await provider.signIn(email.text, password.text, context);
+
+  //   //var authProvider = context.watch<AuthProvider>();
+
+  //   if (msg == '') return;
+  //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+  //     content: Text(msg),
+  //   ));
+  // }
 
   Future<String> signIn(String email, String password, context) async {
     try {
@@ -58,46 +85,47 @@ class AuthProvider extends ChangeNotifier {
   }
   // input controllers
 
-  Future<String> signUp(
-      {required String email,
-      required String password,
-      required String image,
-      required String name,
-      required String address,
-      required String contact,
-      context}) async {
-    if (name.isEmpty ||
-        address.isEmpty ||
-        email.isEmpty ||
-        password.isEmpty ||
-        password.length < 6 ||
-        image == '' ||
-        contact.isEmpty ||
-        contact.length < 10) {
-      // return UtilProvider.showScaffoldMessege(context);
-    }
-    try {
-      _isloading = true;
-      notifyListeners();
-      await _auth.createUserWithEmailAndPassword(
-          email: email.trim(), password: password.trim());
-      await registerdata(
-          email: email,
-          password: password,
-          image: image,
-          name: name,
-          address: address,
-          contact: contact);
-      _isloading = false;
+  // Future<String> signUp(
+  //     {required String email,
+  //     required String password,
+  //     required String image,
+  //     required String name,
+  //     required String address,
+  //     required String contact,
+  //     context}) async {
+  //   if (name.isEmpty ||
+  //       address.isEmpty ||
+  //       email.isEmpty ||
+  //       password.isEmpty ||
+  //       password.length < 6 ||
+  //       image == '' ||
+  //       contact.isEmpty ||
+  //       contact.length < 10) {
+  //     // return UtilProvider.showScaffoldMessege(context);
+  //   }
+  //   try {
+  //     _isloading = true;
+  //     notifyListeners();
+  //     await _auth.createUserWithEmailAndPassword(
+  //         email: email.trim(), password: password.trim());
+  //     await registerdata(
+  //         email: email,
+  //         password: password,
+  //         image: image,
+  //         name: name,
+  //         address: address,
+  //         contact: contact);
+  //     _isloading = false;
 
-      notifyListeners();
-      return Future.value('');
-    } on FirebaseAuthException catch (ex) {
-      _isloading = false;
-      notifyListeners();
-      return Future.value(ex.message);
-    }
-  }
+  //     notifyListeners();
+  //     return Future.value('');
+  //   }
+  //   on FirebaseAuthException catch (ex) {
+  //     _isloading = false;
+  //     notifyListeners();
+  //     return Future.value(ex.message);
+  //   }
+  // }
 
   String _imageToString = tempImg;
   get imageToString => _imageToString;
@@ -142,17 +170,17 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
-  Future<String> fbSign() async {
-    return Future.value('facebook Sign');
-  }
+  // Future<String> fbSign() async {
+  //   return Future.value('facebook Sign');
+  // }
 
-  Future<String> googleSignOut() async {
-    return Future.value('Google SignOut');
-  }
+  // Future<String> googleSignOut() async {
+  //   return Future.value('Google SignOut');
+  // }
 
-  Future<String> fbSignOut() async {
-    return Future.value('Facebook SignOut');
-  }
+  // Future<String> fbSignOut() async {
+  //   return Future.value('Facebook SignOut');
+  // }
 
   //ReadData;
   getAllUserDetails(context) {
@@ -169,24 +197,24 @@ class AuthProvider extends ChangeNotifier {
     });
   }
 
-  registerdata(
-      {required String email,
-      required String password,
-      required String image,
-      required String name,
-      required String address,
-      required String contact}) async {
-    User? user = _auth.currentUser;
+  // registerdata(
+  //     {required String email,
+  //     required String password,
+  //     required String image,
+  //     required String name,
+  //     required String address,
+  //     required String contact}) async {
+  //   User? user = _auth.currentUser;
 
-    FirebaseFirestore.instance.collection('users').doc(user!.uid).set({
-      'password': password,
-      'email': email,
-      'image': image,
-      'name': name,
-      'address': address,
-      'id': user.uid,
-    });
-  }
+  //   FirebaseFirestore.instance.collection('users').doc(user!.uid).set({
+  //     'password': password,
+  //     'email': email,
+  //     'image': image,
+  //     'name': name,
+  //     'address': address,
+  //     'id': user.uid,
+  //   });
+  // }
 
   void notifyListeners();
 }

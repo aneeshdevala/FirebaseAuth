@@ -110,26 +110,26 @@ class _LoginPageState extends State<LoginPage> {
                     sizehight10,
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        GestureDetector(
-                          onTap: () =>
-                              Functions.googleSignIn(authProvider, context),
-                          child: Image.asset(
-                            'assets/google.png',
-                            width: 50,
-                            height: 50,
-                          ),
-                        ),
+                      children: const [
+                        // GestureDetector(
+                        //   onTap: () =>
+                        //       Functions.googleSignIn(authProvider, context),
+                        //   child: Image.asset(
+                        //     'assets/google.png',
+                        //     width: 50,
+                        //     height: 50,
+                        //   ),
+                        // ),
                         sizewidth,
-                        GestureDetector(
-                          onTap: () =>
-                              Functions.fbSignIn(authProvider, context),
-                          child: Image.asset(
-                            'assets/fb_icon_325x325.png',
-                            width: 40,
-                            height: 40,
-                          ),
-                        ),
+                        // GestureDetector(
+                        //   onTap: () =>
+                        //       Functions.fbSignIn(authProvider, context),
+                        //   child: Image.asset(
+                        //     'assets/fb_icon_325x325.png',
+                        //     width: 40,
+                        //     height: 40,
+                        //   ),
+                        // ),
                       ],
                     )
                   ],

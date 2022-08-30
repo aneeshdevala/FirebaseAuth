@@ -2,26 +2,24 @@ import 'dart:convert';
 
 import 'package:firebase/constants/consts.dart';
 import 'package:firebase/controlls/auth_provider.dart';
-import 'package:firebase/controlls/functions/functions.dart';
-import 'package:firebase/controlls/navigators/navigators.dart';
-import 'package:firebase/controlls/providers/providers.dart';
+
+import 'package:firebase/controlls/providers/home_providers.dart';
+
+import 'package:firebase/controlls/providers/signup_pro.dart';
 import 'package:firebase/view/home_screen1.dart';
+
 import 'package:firebase/view/login_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class RegisterPage extends StatefulWidget {
+class RegisterPage extends StatelessWidget {
   const RegisterPage({Key? key}) : super(key: key);
 
   @override
-  State<RegisterPage> createState() => _RegisterPageState();
-}
-
-class _RegisterPageState extends State<RegisterPage> {
-  @override
   Widget build(BuildContext context) {
-    var authProvider = context.watch<AuthProvider>();
+    var authProvider = context.watch<SignUpProvider>();
 
     return StreamBuilder<User?>(
         stream: authProvider.stream(),
@@ -34,113 +32,115 @@ class _RegisterPageState extends State<RegisterPage> {
             child: SafeArea(
               child: Scaffold(
                 body: SingleChildScrollView(
-                  child: Container(
-                    padding: const EdgeInsets.all(20),
-                    child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              const Text(
-                                'Create New Account',
-                                style: TextStyle(
-                                  fontSize: 24,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
+                  child: Consumer<SignUpProvider>(
+                    builder: (context, signupPro, child) => Container(
+                      padding: const EdgeInsets.all(20),
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                const Text(
+                                  'Create New Account',
+                                  style: TextStyle(
+                                    fontSize: 24,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const Spacer(),
+                                Image.asset(
+                                  'assets/undraw_New_entries_re_cffr.png',
+                                  width: 100,
+                                  height: 100,
+                                ),
+                              ],
+                            ),
+                            const SignUpImageWidget(),
+                            sizehight20,
+                            TextFieldWid(
+                              controller: signupPro.nameControl,
+                              label: 'Name',
+                            ),
+                            sizehight20,
+                            TextFieldWid(
+                              controller: signupPro.addressControler,
+                              label: 'Address',
+                            ),
+                            sizehight20,
+                            TextFieldWid(
+                              controller: signupPro.contactControl,
+                              label: 'Contact',
+                            ),
+                            sizehight20,
+                            TextFieldWid(
+                              controller: signupPro.emailControl,
+                              label: 'Email',
+                            ),
+                            sizehight20,
+                            TextFieldWid(
+                              controller: signupPro.passwordControl,
+                              label: 'Password',
+                            ),
+                            sizehight20,
+                            if (signupPro.isLoading)
+                              const CircularProgressIndicator(
+                                strokeWidth: 2,
+                              ),
+                            if (!signupPro.isLoading)
+                              Center(
+                                child: SizedBox(
+                                  width: double.maxFinite,
+                                  child: ElevatedButton(
+                                      style: ButtonStyle(
+                                        backgroundColor:
+                                            MaterialStateProperty.all(
+                                                const Color.fromARGB(
+                                                    255, 241, 15, 83)),
+                                      ),
+                                      onPressed: () =>
+                                          signupPro.signUp(context),
+                                      child: const Text('SignUp')),
                                 ),
                               ),
-                              const Spacer(),
-                              Image.asset(
-                                'assets/undraw_New_entries_re_cffr.png',
-                                width: 100,
-                                height: 100,
-                              ),
-                            ],
-                          ),
-                          const AddImage(),
-                          sizehight20,
-                          TextFieldWid(
-                            controller: Functions.name,
-                            label: 'Name',
-                          ),
-                          sizehight20,
-                          TextFieldWid(
-                            controller: Functions.address,
-                            label: 'Address',
-                          ),
-                          sizehight20,
-                          TextFieldWid(
-                            controller: Functions.contact,
-                            label: 'Contact',
-                          ),
-                          sizehight20,
-                          TextFieldWid(
-                            controller: Functions.email,
-                            label: 'Email',
-                          ),
-                          sizehight20,
-                          TextFieldWid(
-                            controller: Functions.password,
-                            label: 'Password',
-                          ),
-                          sizehight20,
-                          if (authProvider.loading)
-                            const CircularProgressIndicator(
-                              strokeWidth: 2,
+                            sizehight10,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                TextButton(
+                                    onPressed: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const LoginPage()));
+                                    },
+                                    child: const Text('Login'))
+                              ],
                             ),
-                          if (!authProvider.loading)
-                            Center(
-                              child: SizedBox(
-                                width: double.maxFinite,
-                                child: ElevatedButton(
-                                    style: ButtonStyle(
-                                      backgroundColor:
-                                          MaterialStateProperty.all(
-                                              const Color.fromARGB(
-                                                  255, 241, 15, 83)),
-                                    ),
-                                    onPressed: () =>
-                                        Functions.signUp(authProvider, context),
-                                    child: const Text('SignUp')),
-                              ),
-                            ),
-                          sizehight10,
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              TextButton(
-                                  onPressed: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                const LoginPage()));
-                                  },
-                                  child: const Text('Login'))
-                            ],
-                          ),
-                          sizehight20,
-                          const Center(child: Text('Login or Signup with')),
-                          sizehight10,
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Image.asset(
-                                'assets/google.png',
-                                width: 50,
-                                height: 50,
-                              ),
-                              sizewidth,
-                              Image.asset(
-                                'assets/fb_icon_325x325.png',
-                                width: 40,
-                                height: 40,
-                              ),
-                            ],
-                          )
-                        ],
+                            sizehight20,
+                            const Center(child: Text('Login or Signup with')),
+                            sizehight10,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image.asset(
+                                  'assets/google.png',
+                                  width: 50,
+                                  height: 50,
+                                ),
+                                sizewidth,
+                                Image.asset(
+                                  'assets/fb_icon_325x325.png',
+                                  width: 40,
+                                  height: 40,
+                                ),
+                              ],
+                            )
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -150,14 +150,14 @@ class _RegisterPageState extends State<RegisterPage> {
           );
         });
   }
-
-  // @override
-  // Future<void> dispose() async {
-  //   Variables.email.dispose();
-  //   Variables.password.dispose();
-  //   super.dispose();
-  // }
 }
+
+// @override
+// Future<void> dispose() async {
+//   Variables.email.dispose();
+//   Variables.password.dispose();
+//   super.dispose();
+// }
 
 class TextFieldWid extends StatelessWidget {
   final TextEditingController controller;
@@ -185,41 +185,41 @@ class TextFieldWid extends StatelessWidget {
   }
 }
 
-class AddImage extends StatelessWidget {
-  const AddImage({
+class SignUpImageWidget extends StatelessWidget {
+  const SignUpImageWidget({
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<ImageAddPro>(
+    return Consumer<SignUpProvider>(
       builder: (context, value, child) => Center(
         child: SizedBox(
-          height: 115,
-          width: 115,
+          height: 105,
+          width: 105,
           child: Stack(
             clipBehavior: Clip.none,
             fit: StackFit.expand,
             children: [
               CircleAvatar(
-                backgroundColor: Colors.black,
-                radius: 60,
+                backgroundColor: Colors.green,
+                radius: 30,
                 backgroundImage: MemoryImage(
-                  const Base64Decoder().convert(ImageAddPro.imageToString),
+                  const Base64Decoder().convert(value.imageToString),
                 ),
               ),
               Positioned(
                 bottom: 0,
                 right: -30,
                 child: RawMaterialButton(
-                  onPressed: () {
-                    value.pickImage();
+                  onPressed: () async {
+                    await value.pickImage();
                   },
                   elevation: 4,
-                  fillColor: Colors.white,
-                  padding: const EdgeInsets.all(8),
+                  fillColor: Colors.grey,
+                  padding: const EdgeInsets.all(6),
                   shape: const CircleBorder(),
-                  child: const Icon(Icons.person_add),
+                  child: const Icon(Icons.camera_alt_outlined),
                 ),
               )
             ],

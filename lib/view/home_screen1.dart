@@ -1,6 +1,7 @@
 import 'package:firebase/controlls/auth_provider.dart';
 import 'package:firebase/controlls/functions/functions.dart';
 import 'package:firebase/controlls/providers/home_providers.dart';
+import 'package:firebase/controlls/providers/signup_pro.dart';
 import 'package:firebase/view/home_imagewid.dart';
 import 'package:firebase/view/login_page.dart';
 import 'package:firebase/view/update_bottom_scre.dart';
@@ -18,7 +19,7 @@ class HomePage extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
 
     return StreamBuilder<User?>(
-        stream: context.watch<AuthProvider>().stream(),
+        stream: context.watch<SignUpProvider>().stream(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return const LoginPage();
