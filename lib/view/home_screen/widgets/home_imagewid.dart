@@ -39,7 +39,7 @@ class ProfilePic extends StatelessWidget {
                 : loginProvider.loggedUserDetails.image == null
                     ? const CircleAvatar(
                         radius: 100,
-                        backgroundImage: AssetImage('assets/userIcon.png'),
+                        backgroundImage: AssetImage('assets/person.png'),
                         child: Icon(Icons.add_a_photo),
                       )
                     : editProvider.newImage.isNotEmpty

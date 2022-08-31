@@ -1,6 +1,7 @@
 import 'package:firebase/controlls/home_provider/home_providers.dart';
 import 'package:firebase/controlls/login_provider/login_pro.dart';
 import 'package:firebase/controlls/signup_provider/signup_pro.dart';
+import 'package:firebase/utilities/colors.dart';
 import 'package:firebase/utilities/constans.dart';
 import 'package:firebase/view/home_screen/widgets/home_imagewid.dart';
 import 'package:flutter/material.dart';
@@ -26,16 +27,7 @@ class HomePage extends StatelessWidget {
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topRight,
-            end: Alignment.bottomLeft,
-            colors: [
-              Colors.indigo.shade500,
-              Colors.white54,
-            ],
-          ),
-        ),
+        decoration: gradientcolor(),
         child: Center(
           child: Padding(
             padding: const EdgeInsets.all(16.0),
@@ -44,38 +36,6 @@ class HomePage extends StatelessWidget {
                 builder: (context, value, child) {
                   return Column(
                     children: [
-                      // type == ActionType.signUp
-                      //     ? value.newImage.isEmpty
-                      //         ? const CircleAvatar(
-                      //             radius: 100,
-                      //             backgroundImage:
-                      //                 AssetImage('assets/userIcon.png'),
-                      //             child: Icon(Icons.add_a_photo),
-                      //           )
-                      //         : CircleAvatar(
-                      //             radius: 100,
-                      //             //   backgroundColor: kBlack,
-                      //             backgroundImage: MemoryImage(
-                      //               const Base64Decoder()
-                      //                   .convert(value.newImage),
-                      //             ),
-                      //           )
-                      //     : loginProvider.loggedUserDetails.image == null
-                      //         ? const CircleAvatar(
-                      //             radius: 100,
-                      //             backgroundImage:
-                      //                 AssetImage('assets/userIcon.png'),
-                      //             child: Icon(Icons.add_a_photo),
-                      //           )
-                      //         : CircleAvatar(
-                      //             radius: 100,
-                      //             //   backgroundColor: kBlack,
-                      //             backgroundImage: MemoryImage(
-                      //               const Base64Decoder().convert(loginProvider
-                      //                   .loggedUserDetails.image
-                      //                   .toString()),
-                      //             ),
-                      //           ),
                       ProfilePic(type: type),
                       kHeight20,
                       TextFormField(
@@ -133,7 +93,9 @@ class HomePage extends StatelessWidget {
                         controller: editProvider.mobNoController,
                         keyboardType: TextInputType.number,
                         decoration: InputDecoration(
-                          hintText: '',
+                          hintText: type == ActionType.logIn
+                              ? loginProvider.loggedUserDetails.phoneNo
+                              : value.loggedUserDetails.phoneNo,
                           border: const OutlineInputBorder(),
                           contentPadding: const EdgeInsets.symmetric(
                             horizontal: 16,

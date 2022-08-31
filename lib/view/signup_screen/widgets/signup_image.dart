@@ -30,7 +30,7 @@ class SignUpImageWidget extends StatelessWidget {
                     )
                   : const CircleAvatar(
                       radius: 100,
-                      backgroundColor: Colors.red,
+                      // backgroundColor: Colors.red,
                       backgroundImage: AssetImage('assets/person.png')),
               Positioned(
                 bottom: 0,

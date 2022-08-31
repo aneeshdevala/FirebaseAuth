@@ -112,5 +112,5 @@ class HomeProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void notifyListeners();
+  notifyListeners();
 }
