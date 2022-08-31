@@ -14,8 +14,8 @@ class SignUpImageWidget extends StatelessWidget {
     return Consumer<SignUpProvider>(
       builder: (context, value, child) {
         return SizedBox(
-          height: 105,
-          width: 105,
+          height: 150,
+          width: 150,
           child: Stack(
             clipBehavior: Clip.none,
             fit: StackFit.expand,
@@ -30,8 +30,8 @@ class SignUpImageWidget extends StatelessWidget {
                     )
                   : const CircleAvatar(
                       radius: 100,
-                      //   backgroundColor: kBlack,
-                      backgroundImage: AssetImage('assets/userIcon.png')),
+                      backgroundColor: Colors.red,
+                      backgroundImage: AssetImage('assets/person.png')),
               Positioned(
                 bottom: 0,
                 right: -25,

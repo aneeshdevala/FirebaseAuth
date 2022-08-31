@@ -20,7 +20,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final loginProvider = context.watch<LogInProvider>();
     final editProvider = context.watch<HomeProvider>();
-    editProvider.notifyListeners();
+    // editProvider.notifyListeners();
 
     return Scaffold(
       body: Container(
@@ -44,6 +44,38 @@ class HomePage extends StatelessWidget {
                 builder: (context, value, child) {
                   return Column(
                     children: [
+                      // type == ActionType.signUp
+                      //     ? value.newImage.isEmpty
+                      //         ? const CircleAvatar(
+                      //             radius: 100,
+                      //             backgroundImage:
+                      //                 AssetImage('assets/userIcon.png'),
+                      //             child: Icon(Icons.add_a_photo),
+                      //           )
+                      //         : CircleAvatar(
+                      //             radius: 100,
+                      //             //   backgroundColor: kBlack,
+                      //             backgroundImage: MemoryImage(
+                      //               const Base64Decoder()
+                      //                   .convert(value.newImage),
+                      //             ),
+                      //           )
+                      //     : loginProvider.loggedUserDetails.image == null
+                      //         ? const CircleAvatar(
+                      //             radius: 100,
+                      //             backgroundImage:
+                      //                 AssetImage('assets/userIcon.png'),
+                      //             child: Icon(Icons.add_a_photo),
+                      //           )
+                      //         : CircleAvatar(
+                      //             radius: 100,
+                      //             //   backgroundColor: kBlack,
+                      //             backgroundImage: MemoryImage(
+                      //               const Base64Decoder().convert(loginProvider
+                      //                   .loggedUserDetails.image
+                      //                   .toString()),
+                      //             ),
+                      //           ),
                       ProfilePic(type: type),
                       kHeight20,
                       TextFormField(
@@ -101,10 +133,7 @@ class HomePage extends StatelessWidget {
                         controller: editProvider.mobNoController,
                         keyboardType: TextInputType.number,
                         decoration: InputDecoration(
-                          hintText:
-                              loginProvider.loggedUserDetails.phoneNo!.isEmpty
-                                  ? ''
-                                  : loginProvider.loggedUserDetails.phoneNo,
+                          hintText: '',
                           border: const OutlineInputBorder(),
                           contentPadding: const EdgeInsets.symmetric(
                             horizontal: 16,
@@ -129,7 +158,6 @@ class HomePage extends StatelessWidget {
                                 },
                                 style: ElevatedButton.styleFrom(
                                   fixedSize: const Size(150, 30),
-                                  onSurface: Colors.yellow,
                                   primary: Colors.red.shade700,
                                 ),
                                 child: const Text('LogOut'),

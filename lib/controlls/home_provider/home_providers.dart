@@ -111,4 +111,6 @@ class HomeProvider with ChangeNotifier {
     newImage = base64Encode(bytes);
     notifyListeners();
   }
+
+  void notifyListeners();
 }

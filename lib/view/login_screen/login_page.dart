@@ -20,25 +20,7 @@ class LoginScreen extends StatelessWidget {
         body: Container(
           width: double.infinity,
           height: double.infinity,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topRight,
-              end: Alignment.bottomLeft,
-              // stops: [
-              //   0.1,
-              //   0.4,
-              //   0.6,
-              //   0.9
-              // ],
-              colors: [
-                Color.fromARGB(160, 163, 8, 26),
-
-                Color.fromARGB(73, 80, 44, 44),
-                // Colors.indigo,
-                // Colors.teal
-              ],
-            ),
-          ),
+          decoration: gradientcolor(),
           child: Center(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -48,10 +30,9 @@ class LoginScreen extends StatelessWidget {
                   child: Column(
                     children: [
                       // SizedBox(height: MediaQuery.of(context).size.height / 5),
-                      Image.asset('assets/login_img1.png',
+                      Image.asset('assets/undraw_Login_re_4vu2.png',
                           height: MediaQuery.of(context).size.height / 3.5),
-                      Text('LOGIN',
-                          style: GoogleFonts.permanentMarker(fontSize: 30)),
+                      Text('LOGIN', style: GoogleFonts.acme(fontSize: 30)),
                       kHeight20,
                       TextFormField(
                         controller: loginController.emailController,
@@ -70,6 +51,7 @@ class LoginScreen extends StatelessWidget {
                                 borderSide:
                                     const BorderSide(color: Colors.black))),
                         validator: (value) {
+                          Colors.black;
                           if (value == null || value.isEmpty) {
                             return "Enter E-mail";
                           } else {
@@ -95,6 +77,7 @@ class LoginScreen extends StatelessWidget {
                             ),
                           ),
                           validator: (value) {
+                            Colors.black;
                             if (value == null || value.isEmpty) {
                               return "Enter password";
                             } else {
@@ -155,12 +138,12 @@ class LoginScreen extends StatelessWidget {
                             onTap: () {},
                             child: CircleAvatar(
                                 backgroundColor: Colors.transparent,
-                                child: Image.asset('assets/google_nonbg.png')),
+                                child: Image.asset('assets/google.png')),
                           ),
                           kWidth10,
                           CircleAvatar(
                               backgroundColor: Colors.transparent,
-                              child: Image.asset('assets/fb_nonbg.png')),
+                              child: Image.asset('assets/fb_icon_325x325.png')),
                         ],
                       )
                     ],

@@ -26,7 +26,7 @@ class ProfilePic extends StatelessWidget {
                 ? value.newImage.isEmpty || editProvider.newImage.isEmpty
                     ? const CircleAvatar(
                         radius: 100,
-                        backgroundImage: AssetImage('assets/userIcon.png'),
+                        backgroundImage: AssetImage('assets/person.png'),
                         child: Icon(Icons.add_a_photo),
                       )
                     : CircleAvatar(

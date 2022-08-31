@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:firebase/model.dart/model.dart';
 import 'package:firebase/utilities/snackbar.dart';
+import 'package:firebase/utilities/tempimg.dart';
 import 'package:firebase/view/home_screen/home_screen1.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +25,8 @@ class SignUpProvider with ChangeNotifier {
   UserData loggedUserDetails = UserData();
   dynamic newUser;
 
-  Future<String> signUpUser(context) async {
+  signUpUser(context) async {
+    notifyListeners();
     final password = passwordController.text;
     // final email = emailController.text;
     // final userName = userNameController.text;
@@ -38,7 +40,7 @@ class SignUpProvider with ChangeNotifier {
       return Future.value("");
     } on FirebaseAuthException catch (e) {
       log("$e");
-      return SnackBarWidget.checkFormFill(context, e.message);
+      return e.message.toString();
     }
   }
 
@@ -73,11 +75,11 @@ class SignUpProvider with ChangeNotifier {
                 type: ActionType.signUp,
               )),
         ),
-        ((route) => false));
+        ((route) => true));
   }
 
   checkFormField(BuildContext context, errorMessage) async {
-    if (errorMessage == "") {
+    if (errorMessage == "error") {
       return;
     } else {
       ScaffoldMessenger.of(context).hideCurrentSnackBar();
@@ -85,7 +87,7 @@ class SignUpProvider with ChangeNotifier {
     }
   }
 
-  String newImage = "";
+  String newImage = '';
   getImageFromGallery(conteex) async {
     XFile? pickedFile =
         await ImagePicker().pickImage(source: ImageSource.gallery);
@@ -94,14 +96,3 @@ class SignUpProvider with ChangeNotifier {
     notifyListeners();
   }
 }
-
-// class PickImageController extends ChangeNotifier {
-//   String newImage = "";
-//   getImageFromGallery(conteex) async {
-//     XFile? pickedFile =
-//         await ImagePicker().pickImage(source: ImageSource.gallery);
-//     final bytes = File(pickedFile!.path).readAsBytesSync();
-//     newImage = base64Encode(bytes);
-//     notifyListeners();
-//   }
-// }

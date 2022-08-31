@@ -33,7 +33,7 @@ class LogInProvider with ChangeNotifier {
       });
       isLoading = false;
       notifyListeners();
-      return Future.value("");
+      return Future.value("error");
     } on FirebaseAuthException catch (e) {
       log(e.message.toString());
       isLoading = false;

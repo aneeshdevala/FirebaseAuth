@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 class SnackBarWidget {
-  static checkFormFill(context, msg) {
+  static checkFormFill(context, msg) async {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(
-          msg,
+          '$msg',
           textAlign: TextAlign.center,
         ),
         backgroundColor: Colors.transparent.withOpacity(0.6),
